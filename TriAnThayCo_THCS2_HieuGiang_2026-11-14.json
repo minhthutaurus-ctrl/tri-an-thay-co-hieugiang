@@ -1,0 +1,222 @@
+[
+  {
+    "id": "hg-mwgfna5e",
+    "gender": "Cô",
+    "name": "Thảo",
+    "subject": "Toán",
+    "classSign": "Tập thể học sinh 8b1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Thảo! Cảm ơn sự dễ thương và hiền từ của cô trong suốt năm lớp 7 đáng nhớ. Chúc cô luôn luôn tươi vui, hạnh phúc và gặt hái nhiều thành công.\"",
+    "theme": "mint",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Thảo"
+  },
+  {
+    "id": "hg-mwgfmqqi",
+    "gender": "Cô",
+    "name": "Nhàn",
+    "subject": "Ngữ Văn",
+    "classSign": "Tập thể học sinh 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Nhàn! Cảm ơn sự hiền hậu và tình yêu thương vô bờ bến mà cô đã dành cho chúng em từ những năm lớp 6. Chúc cô luôn mạnh khỏe, hạnh phúc và luôn được các thế hệ học trò nhớ đến.\"",
+    "theme": "amber",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Nhàn"
+  },
+  {
+    "id": "hg-mwgfm5z0",
+    "gender": "Thầy",
+    "name": "Minh",
+    "subject": "Bảo vệ",
+    "classSign": "Tập thể học sinh 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Ông Minh! Cảm ơn ông vì sự tốt bụng, luôn chu đáo và được toàn thể học sinh yêu quý. Chúc ông luôn có thật nhiều sức khỏe, bình an và luôn đồng hành cùng mái trường thân yêu.\"",
+    "theme": "sky",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Thầy Minh"
+  },
+  {
+    "id": "hg-mwgfllpf",
+    "gender": "Thầy",
+    "name": "Hùng",
+    "subject": "Hiệu trưởng",
+    "classSign": "Tập thể học sinh 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Thầy Hùng! Dù bề ngoài thầy rất nghiêm khắc nhưng chúng em luôn cảm nhận được sự ấm áp và dễ mến của thầy. Chúc thầy luôn vững tay chèo để đưa trường THCS Số 2 Hiếu Giang ngày càng phát triển!\"",
+    "theme": "mint",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Thầy Hùng"
+  },
+  {
+    "id": "hg-mwgfkt7h",
+    "gender": "Cô",
+    "name": "Quy",
+    "subject": "GDĐP",
+    "classSign": "Tập thể học sinh lớp 8b1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Lê Quy! Em thật bất ngờ và xúc động vì cô luôn thương học sinh và nhớ tên từng bạn trong lớp. Chúc cô luôn mạnh khỏe, vui vẻ và giữ mãi tình cảm ấm áp ấy!\"",
+    "theme": "rose",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Quy"
+  },
+  {
+    "id": "hg-mwgfk7xi",
+    "gender": "Thầy",
+    "name": "Tuấn",
+    "subject": "HĐTN",
+    "classSign": "Tập thể học sinh 8b1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Thầy Tuấn! Cảm ơn thầy vì sự bao dung và luôn tạo mọi điều kiện tốt nhất cho chúng em học tập, rèn luyện. Chúc thầy luôn dồi dào sức khỏe và thành công trên cương vị quản lý.\"",
+    "theme": "sky",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Thầy Tuấn"
+  },
+  {
+    "id": "hg-mwgfjhz3",
+    "gender": "Cô",
+    "name": "Nguyên",
+    "subject": "Mĩ thuật",
+    "classSign": "Tập thể học sinh 8b1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Nguyên! Cảm ơn những giờ học Mĩ thuật bay bổng và sự hướng dẫn tỉ mỉ, chi tiết của cô. Chúc cô luôn tràn đầy cảm hứng sáng tạo và luôn hạnh phúc.\"",
+    "theme": "mint",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Nguyên"
+  },
+  {
+    "id": "hg-mwgfix19",
+    "gender": "Cô",
+    "name": "Hà",
+    "subject": "Âm nhạc",
+    "classSign": "Tập thể học sinh 8b1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Hà! Cảm ơn cô vì những tiết học, hoạt động Đội cuốn hút và sự dễ thương của cô đã tiếp lửa cho chúng em. Chúc cô luôn trẻ trung, hạnh phúc và thành công!\"",
+    "theme": "rose",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Hà"
+  },
+  {
+    "id": "hg-mwgfi70a",
+    "gender": "Cô",
+    "name": "Huyền",
+    "subject": "GDTC",
+    "classSign": "Tập thể học sinh 8b1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Huyền! Cảm ơn cô vì sự dễ gần và những câu chuyện nói chuyện cực kỳ hợp cạ với học sinh chúng em. Chúc cô luôn năng động, khỏe mạnh và tràn đầy sức sống.\"",
+    "theme": "mint",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Huyền"
+  },
+  {
+    "id": "hg-mwgfhmxi",
+    "gender": "Thầy",
+    "name": "Giang",
+    "subject": "Công nghệ",
+    "classSign": "Tập thể học sinh 8b1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Thầy Giang! Cảm ơn thầy vì luôn quan tâm, suy nghĩ và tạo điều kiện tốt nhất cho học sinh. Chúc thầy luôn mạnh khỏe, vui vẻ và giữ vững ngọn lửa nghề.\"",
+    "theme": "sky",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Thầy Giang"
+  },
+  {
+    "id": "hg-mwgfh2ds",
+    "gender": "Cô",
+    "name": "Nga",
+    "subject": "GDCD",
+    "classSign": "Tập thể học sinh 8b1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Nga! Cảm ơn cô vì những giờ học GDCD hay và những bài học làm người ý nghĩa. Chúc cô luôn xinh đẹp, rạng rỡ và thành công rực rỡ trong công việc.\"",
+    "theme": "rose",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Nga"
+  },
+  {
+    "id": "hg-mwgfgj4f",
+    "gender": "Cô",
+    "name": "Nguyễn Quy",
+    "subject": "Địa lí",
+    "classSign": "Tập thể học sinh lớp 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Nguyễn Quy! Cảm ơn sự hiền hậu và cách giảng dạy môn Địa lý rất cuốn hút của cô. Chúc cô luôn vui vẻ, hạnh phúc và luôn được học sinh yêu quý.\"",
+    "theme": "lavender",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Nguyễn Quy"
+  },
+  {
+    "id": "hg-mwgffuuu",
+    "gender": "Cô",
+    "name": "Hà",
+    "subject": "Lịch sử",
+    "classSign": "Tập thể học sinh lớp 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Hà! Cảm ơn những bài học lịch sử sâu sắc và sự nghiêm khắc nhưng đầy bao dung của cô. Chúc cô luôn dồi dào sức khỏe và luôn tràn đầy nhiệt huyết với nghề.\"",
+    "theme": "mint",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Hà"
+  },
+  {
+    "id": "hg-mwgffaql",
+    "gender": "Cô",
+    "name": "Hằng",
+    "subject": "Sinh",
+    "classSign": "Tập thể học sinh lớp 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Bùi Hằng! Cảm ơn cô đã luôn kiên nhẫn, dạy dỗ độc đáo và thương lớp mình rất nhiều dù đôi lúc chúng em chưa ngoan. Chúc cô luôn bình an, hạnh phúc và luôn yêu thương chúng em ạ!\"",
+    "theme": "rose",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Hằng"
+  },
+  {
+    "id": "hg-mwgfepsz",
+    "gender": "Cô",
+    "name": "Liên",
+    "subject": "Vật lí",
+    "classSign": "Tập thể học sinh lớp 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Liên! Cảm ơn cô vì sự độ lượng và những lời giảng Vật lý vô cùng dễ hiểu. Chúc cô luôn vui tươi, hạnh phúc và gặt hái nhiều thành công trong cuộc sống.\"",
+    "theme": "mint",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Liên"
+  },
+  {
+    "id": "hg-mwgfe5w3",
+    "gender": "Cô",
+    "name": "Lan Phương",
+    "subject": "Hóa",
+    "classSign": "Tập thể học sinh lớp 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Lan Phương! Dù đôi khi lớp thấy cô hơi nghiêm khắc, nhưng chúng em hiểu tất cả đều vì mong muốn chúng em tiến bộ và luôn nghĩ cho học sinh. Chúc cô luôn nhiều sức khỏe và bình an!\"",
+    "theme": "amber",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Lan Phương"
+  },
+  {
+    "id": "hg-mwgfde6x",
+    "gender": "Cô",
+    "name": "Yến",
+    "subject": "Tin Học",
+    "classSign": "Tập thể học sinh lớp 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Yến! Cảm ơn cô đã mang đến những giờ học Tin học bổ ích, tạo nhiều cơ hội cho chúng em thực hành. Chúc cô luôn mạnh khỏe, hạnh phúc và luôn giữ mãi nụ cười rạng rỡ.\"",
+    "theme": "lavender",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Yến"
+  },
+  {
+    "id": "hg-mwgfcrh5",
+    "gender": "Cô",
+    "name": "Hà",
+    "subject": "Tiếng Anh",
+    "classSign": "Tập thể học sinh lớp 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Hà! Em xin cảm ơn cô vì sự tâm lý và tình cảm đặc biệt mà cô dành cho lớp chúng em. Chúc cô luôn tươi trẻ, xinh đẹp và gặt hái được thật nhiều thành công trong sự nghiệp.\"",
+    "theme": "mint",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Hà"
+  },
+  {
+    "id": "hg-mwgfbmzh",
+    "gender": "Cô",
+    "name": "Linh",
+    "subject": "Ngữ Văn",
+    "classSign": "Tập thể học sinh lớp 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Cô Linh! Cảm ơn sự bao dung và những bài giảng Ngữ văn dễ hiểu, truyền cảm hứng của cô. Chúc cô luôn tràn đầy sức khỏe, nhiệt huyết và luôn là người lái đò tận tụy của chúng em.\"",
+    "theme": "amber",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Cô Linh"
+  },
+  {
+    "id": "hg-mwgfao6i",
+    "gender": "Thầy",
+    "name": "Phương",
+    "subject": "Toán",
+    "classSign": "Tập thể học sinh lớp 8B1 THCS Số 2 Hiếu Giang",
+    "message": "\"Kính gửi Thầy Phương! Cảm ơn thầy vì luôn mang đến những tiết học Toán thú vị và nụ cười vô cùng dễ thương trên lớp. Chúc thầy luôn giữ vững năng lượng tích cực, luôn vui vẻ và hạnh phúc ạ!\"",
+    "theme": "sky",
+    "hasAudio": false,
+    "audioTitle": "Giọng đọc gửi Thầy Phương"
+  }
+]
