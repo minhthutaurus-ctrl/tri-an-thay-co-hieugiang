@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tri Ân Thầy Cô - Trường THCS Số 2 Hiếu Giang</title>
+  
+  <!-- Google Fonts: Phông chữ viết tay học trò & tiếng Việt chuẩn -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Dancing+Script:wght@600;700&family=Patrick+Hand&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- QR Code Generator Library -->
+  <script src="qrcode.min.js"></script>
+</head>
+<body>
+  <!-- Canvas hiệu ứng Hoa hướng dương & Trái tim bay -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Thanh điều khiển hiệu ứng & nhạc nền cố định góc màn hình -->
+  <aside class="floating-controls" aria-label="Điều khiển hiệu ứng">
+    <button id="toggleParticlesBtn" class="pill-btn" title="Bật/Tắt hiệu ứng hoa và tim bay">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> <span class="btn-text">Hiệu ứng: Bật</span>
+    </button>
+    <button id="toggleBgmBtn" class="pill-btn" title="Bật/Tắt nhạc nền du dương">
+      <i class="fa-solid fa-music"></i> <span class="btn-text">Nhạc nền: Tắt</span>
+    </button>
+  </aside>
+
+  <!-- Toàn bộ ứng dụng -->
+  <div class="app-container">
+    
+    <!-- HEADER PHONG CÁCH SCRAPBOOK / SỔ TAY KỶ YẾU HỌC TRÒ -->
+    <header class="header-scrapbook">
+      <div class="washi-tape tape-center"></div>
+      
+      <div class="school-badge-container">
+        <div class="school-stamp">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>HIẾU GIANG</span>
+        </div>
+        <div class="header-texts">
+          <div class="sub-header-tag"><i class="fa-solid fa-heart text-coral"></i> Bức Thư Tri Ân & Gửi Trao Lời Chúc</div>
+          <h1 class="school-title">TRƯỜNG THCS SỐ 2 HIẾU GIANG</h1>
+          <p class="school-slogan">"Nét bút tri ân - Vạn lời kính chúc gửi đến người gieo mầm tri thức"</p>
+        </div>
+      </div>
+
+      <!-- Thanh thông tin nhanh & các nút thao tác chung -->
+      <div class="header-actions">
+        <button id="openAddModalBtn" class="action-btn btn-primary">
+          <i class="fa-solid fa-user-plus"></i> Thêm Thầy/Cô Mới
+        </button>
+        <button id="openManageModalBtn" class="action-btn btn-secondary">
+          <i class="fa-solid fa-sliders"></i> Quản Lý Danh Sách
+        </button>
+      </div>
+    </header>
+
+    <!-- BỐ CỤC CHÍNH 2 PHẦN -->
+    <main class="main-content">
+      
+      <!-- ============================================== -->
+      <!-- PHẦN 1: TÌM KIẾM, PHÂN LOẠI & CHỌN THẦY CÔ     -->
+      <!-- ============================================== -->
+      <section class="section-container card-scrapbook teacher-picker-section" id="teacherSection">
+        <div class="washi-tape tape-top-left"></div>
+        <div class="washi-tape tape-top-right"></div>
+        
+        <div class="section-header">
+          <div class="badge-number">1</div>
+          <div class="section-title-wrap">
+            <h2 class="section-title">Chọn & Tìm Kiếm Thầy Cô</h2>
+            <p class="section-desc">Chọn nhanh danh xưng Thầy / Cô hoặc tìm kiếm theo tên và bộ môn giảng dạy</p>
+          </div>
+        </div>
+
+        <!-- Bộ lọc & Thanh tìm kiếm -->
+        <div class="filter-toolbar">
+          <!-- Phân loại danh xưng: Tất cả / Thầy / Cô -->
+          <div class="gender-filter-group" role="group" aria-label="Bộ lọc danh xưng">
+            <button class="filter-chip active" data-gender="all">
+              <i class="fa-solid fa-users"></i> Tất cả (<span id="countAll">0</span>)
+            </button>
+            <button class="filter-chip" data-gender="Thầy">
+              <i class="fa-solid fa-user-tie"></i> Thầy Giáo (<span id="countThay">0</span>)
+            </button>
+            <button class="filter-chip" data-gender="Cô">
+              <i class="fa-solid fa-user"></i> Cô Giáo (<span id="countCo">0</span>)
+            </button>
+          </div>
+
+          <!-- Lọc theo phân môn & Ô tìm kiếm -->
+          <div class="search-and-subject">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="searchInput" placeholder="Nhập tên thầy cô hoặc bộ môn (Toán, Văn, Anh...)..." autocomplete="off">
+              <button id="clearSearchBtn" class="clear-btn" title="Xóa tìm kiếm" style="display: none;">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="subject-dropdown-wrap">
+              <select id="subjectFilter" class="scrapbook-select" aria-label="Lọc theo bộ môn">
+                <option value="all">Tất cả bộ môn</option>
+                <!-- Tùy chọn môn học sẽ được render bằng JS -->
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danh sách thẻ Thầy Cô (Dạng Album kỷ yếu / Polaroid) -->
+        <div class="teacher-grid" id="teacherGrid">
+          <!-- Dynamic cards rendered via JS -->
+        </div>
+
+        <!-- Trạng thái trống khi tìm kiếm không thấy -->
+        <div id="noResultsState" class="empty-state" style="display: none;">
+          <div class="empty-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+          <h3>Không tìm thấy Thầy/Cô phù hợp!</h3>
+          <p>Hãy thử tìm kiếm với từ khóa khác hoặc bấm nút thêm mới để bổ sung Thầy/Cô vào danh sách.</p>
+          <button class="action-btn btn-primary" onclick="app.openAddTeacherModal()">
+            <i class="fa-solid fa-plus"></i> Thêm Thầy Cô Ngay
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- PHẦN 2: BỨC THƯ TAY & TRẢI NGHIỆM ĐA GIÁC QUAN   -->
+      <!-- ============================================== -->
+      <section class="section-container card-scrapbook letter-experience-section" id="letterSection">
+        <div class="washi-tape tape-top-center"></div>
+
+        <div class="section-header">
+          <div class="badge-number">2</div>
+          <div class="section-title-wrap">
+            <h2 class="section-title">Nội Dung Lời Chúc & Trải Nghiệm Thư Tay</h2>
+            <p class="section-desc">Bấm mở phong bì để ngắm bức thư viết tay trên nền giấy vở và lắng nghe giọng đọc truyền cảm</p>
+          </div>
+        </div>
+
+        <!-- MÀN TRÌNH DIỄN PHONG BÌ THƯ TƯƠNG TÁC (3D ENVELOPE) -->
+        <div class="envelope-showcase-wrapper">
+          
+          <div class="envelope-outer" id="interactiveEnvelope" role="button" tabindex="0" aria-label="Bấm để mở hoặc đóng phong bì thư">
+            <!-- Nắp phong bì (gập mở) -->
+            <div class="envelope-flap" id="envelopeFlap"></div>
+            
+            <!-- Con dấu sáp niêm phong -->
+            <div class="wax-seal" id="waxSeal">
+              <div class="seal-inner">
+                <i class="fa-solid fa-heart"></i>
+                <span class="seal-text">MỞ THƯ</span>
+              </div>
+            </div>
+
+            <!-- Thân trước phong bì -->
+            <div class="envelope-pocket">
+              <div class="envelope-stamp">
+                <div class="post-stamp">
+                  <span class="stamp-rate">20/11</span>
+                  <i class="fa-solid fa-sun text-yellow"></i>
+                  <span class="stamp-label">Hiếu Giang</span>
+                </div>
+                <div class="post-mark">
+                  <span>THCS SỐ 2</span>
+                  <span>TRI ÂN 2026</span>
+                </div>
+              </div>
+
+              <div class="envelope-recipient-preview">
+                <span class="send-to-label">Kính gửi:</span>
+                <span class="recipient-name-preview" id="envelopeRecipient">Thầy/Cô kính mến</span>
+                <span class="recipient-subject-preview" id="envelopeSubject">Trường THCS Số 2 Hiếu Giang</span>
+              </div>
+
+              <div class="envelope-hint">
+                <i class="fa-regular fa-hand-pointer pulse-animation"></i> Nhấp để mở phong thư
+              </div>
+            </div>
+
+            <!-- BỨC THƯ TRÊN NỀN GIẤY VỞ HỌC TRÒ -->
+            <article class="letter-paper" id="letterPaper">
+              <div class="paper-margin-line"></div>
+              
+              <!-- Góc dán băng dính trang trí -->
+              <div class="corner-tape corner-left"></div>
+              <div class="corner-tape corner-right"></div>
+
+              <div class="letter-inner-content">
+                <!-- Tiêu đề thư -->
+                <div class="letter-head">
+                  <div class="school-micro-header">
+                    <i class="fa-solid fa-feather-pointed"></i> THCS SỐ 2 HIẾU GIANG - THƯ TRI ÂN
+                  </div>
+                  <div class="letter-date" id="letterDateDisplay">Quảng Trị, ngày 20 tháng 11 năm 2026</div>
+                </div>
+
+                <!-- Lời chào đầu thư -->
+                <div class="letter-salutation" id="letterSalutation">
+                  Kính gửi: Thầy/Cô kính mến!
+                </div>
+
+                <!-- Nội dung chính của lời chúc -->
+                <div class="letter-body-text" id="letterMessage">
+                  Hãy chọn một Thầy hoặc Cô ở danh sách phía trên để mở bức thư đầy ắp tình cảm và những lời tri ân chân thành nhất từ chúng em.
+                </div>
+
+                <!-- KHU VỰC TÍCH HỢP GIỌNG ĐỌC THẬT (AUDIO PLAYER & RECORDER) -->
+                <div class="letter-audio-box">
+                  <div class="audio-box-header">
+                    <span class="audio-tag"><i class="fa-solid fa-microphone-lines"></i> Giọng Đọc Tâm Tình Từ Học Sinh</span>
+                    <span class="audio-note-status" id="audioStatusBadge">Có bản thu âm</span>
+                  </div>
+
+                  <!-- Trình phát Audio tùy biến đẹp mắt -->
+                  <div class="custom-audio-player" id="customAudioPlayer">
+                    <button class="audio-control-btn play-btn" id="playAudioBtn" title="Phát / Tạm dừng giọng đọc">
+                      <i class="fa-solid fa-play"></i>
+                    </button>
+                    
+                    <div class="audio-track-info">
+                      <div class="audio-title-bar">
+                        <span class="track-title" id="audioTrackTitle">Giọng đọc học trò gửi Thầy Cô</span>
+                        <span class="audio-timer" id="audioTimer">00:00 / 00:00</span>
+                      </div>
+                      <div class="progress-container" id="audioProgressContainer">
+                        <div class="progress-bar" id="audioProgressBar"></div>
+                      </div>
+                    </div>
+
+                    <div class="audio-extra-actions">
+                      <button class="mini-icon-btn" id="voiceRecordModalBtn" title="Tải file giọng đọc riêng hoặc ghi âm giọng nói của lớp">
+                        <i class="fa-solid fa-sliders"></i> Đổi giọng đọc
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Thẻ audio ẩn -->
+                  <audio id="realVoiceAudio" preload="auto"></audio>
+                </div>
+
+                <!-- Lời kết & Chữ ký học trò -->
+                <div class="letter-signature-block">
+                  <p class="closing-phrase">Chúng em xin kính chúc Thầy/Cô luôn dồi dào sức khỏe, niềm vui và luôn giữ trọn ngọn lửa nhiệt huyết với sự nghiệp trồng người!</p>
+                  <div class="signature-handwriting">
+                    <span class="sign-from">Học sinh thân thương,</span>
+                    <span class="sign-class" id="signClassName">Tập thể học sinh THCS Số 2 Hiếu Giang</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Nút điều khiển nhanh cho bức thư -->
+          <div class="envelope-action-buttons">
+            <button id="toggleEnvelopeStateBtn" class="action-btn btn-primary">
+              <i class="fa-solid fa-envelope-open-text"></i> <span id="toggleEnvelopeText">Mở Rộng Thư Tay</span>
+            </button>
+            <button id="quickEditWishBtn" class="action-btn btn-secondary">
+              <i class="fa-solid fa-pen-fancy"></i> Chỉnh Sửa Lời Chúc Này
+            </button>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ============================================== -->
+      <!-- PHẦN 3: TÍNH NĂNG MÃ QR & TIỆN ÍCH IN ẤN       -->
+      <!-- ============================================== -->
+      <section class="section-container card-scrapbook qr-section" id="qrSection">
+        <div class="washi-tape tape-top-left"></div>
+        <div class="washi-tape tape-top-right"></div>
+
+        <div class="section-header">
+          <div class="badge-number">3</div>
+          <div class="section-title-wrap">
+            <h2 class="section-title">Mã QR Riêng Biệt & Tiện Ích Dán Thiệp</h2>
+            <p class="section-desc">Mã QR được tự động tạo riêng cho từng Thầy Cô – tiện lợi tải ảnh in ấn dán báo tường hoặc thiệp mừng</p>
+          </div>
+        </div>
+
+        <div class="qr-showcase-grid">
+          
+          <!-- Thẻ trình bày QR phong cách thiệp kỷ yếu -->
+          <div class="qr-card-preview" id="qrCardElement">
+            <div class="qr-tape-accent"></div>
+            
+            <div class="qr-card-header">
+              <div class="qr-card-logo"><i class="fa-solid fa-school"></i> THCS SỐ 2 HIẾU GIANG</div>
+              <h3 class="qr-card-title" id="qrCardTeacherName">Cô Lê Thị Thu Hà</h3>
+              <p class="qr-card-sub" id="qrCardSubject">Bộ môn: Ngữ Văn</p>
+            </div>
+
+            <div class="qr-code-wrapper">
+              <div id="qrcodeContainer"></div>
+              <div class="qr-scan-guide">
+                <i class="fa-solid fa-qrcode"></i> Quét mã để mở thư tay & nghe giọng đọc
+              </div>
+            </div>
+
+            <div class="qr-card-footer">
+              <span class="qr-footer-quote">"Tri ân người gieo hạt, trao gửi muôn vạn niềm tin"</span>
+              <span class="qr-footer-hash">#THCS2HieuGiang #TriAnThayCo2011</span>
+            </div>
+          </div>
+
+          <!-- Các nút chức năng thao tác với QR -->
+          <div class="qr-actions-panel">
+            <h4 class="panel-heading"><i class="fa-solid fa-wand-magic-sparkles"></i> Tiện ích chia sẻ & In ấn</h4>
+            <p class="panel-desc">Bạn có thể tải ngay bức thiệp QR sắc nét để dán vào báo tường, thiệp hoa giấy hoặc gửi link trực tiếp cho Thầy/Cô.</p>
+
+            <div class="btn-stack">
+              <button id="downloadQrCardBtn" class="action-btn btn-success full-width">
+                <i class="fa-solid fa-download"></i> Tải Ảnh Thiệp QR (PNG Sắc Nét)
+              </button>
+
+              <button id="printQrCardBtn" class="action-btn btn-accent full-width">
+                <i class="fa-solid fa-print"></i> In Thiệp / Mã QR Trực Tiếp
+              </button>
+
+              <button id="copyShareLinkBtn" class="action-btn btn-secondary full-width">
+                <i class="fa-solid fa-link"></i> Sao Chép Đường Dẫn Thư
+              </button>
+            </div>
+
+            <!-- Hướng dẫn sử dụng báo tường -->
+            <div class="scrapbook-tip-box">
+              <div class="tip-title"><i class="fa-solid fa-lightbulb text-yellow"></i> Gợi ý thú vị:</div>
+              <p>In mã QR này dán vào báo tường lớp hoặc mặt sau tấm thiệp chúc mừng. Khi thầy cô dùng điện thoại quét mã, trang web sẽ tự động mở phong bì thư tay và phát giọng đọc đầy bất ngờ!</p>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- FOOTER CHÂN TRANG -->
+    <footer class="footer-scrapbook">
+      <p class="copyright-line">
+        &copy; 2026 - Công trình kỷ niệm ngày Nhà giáo Việt Nam 20/11 - Trường THCS Số 2 Hiếu Giang.
+      </p>
+      <p class="footer-sub">
+        Thiết kế theo phong cách scrapbook lưu bút học trò &bull; Tích hợp âm thanh thực tế &bull; Lưu trữ an toàn trên trình duyệt.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: THÊM / CHỈNH SỬA THÔNG TIN THẦY CÔ      -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="editTeacherModal" style="display: none;">
+    <div class="modal-dialog scrapbook-modal">
+      <div class="washi-tape tape-center"></div>
+      
+      <div class="modal-header">
+        <h3 class="modal-title" id="editModalTitle">Chỉnh Sửa Thông Tin Thầy/Cô</h3>
+        <button class="modal-close-btn" id="closeEditModalBtn">&times;</button>
+      </div>
+
+      <form id="teacherForm" class="modal-body">
+        <input type="hidden" id="formTeacherId">
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="formGender">Danh xưng <span class="req">*</span></label>
+            <select id="formGender" class="form-control" required>
+              <option value="Cô">Cô</option>
+              <option value="Thầy">Thầy</option>
+            </select>
+          </div>
+
+          <div class="form-group flex-2">
+            <label for="formName">Họ và tên Thầy/Cô <span class="req">*</span></label>
+            <input type="text" id="formName" class="form-control" placeholder="Ví dụ: Lê Thị Thu Hà" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="formSubject">Bộ môn giảng dạy <span class="req">*</span></label>
+            <input type="text" id="formSubject" class="form-control" placeholder="Ví dụ: Ngữ Văn, Toán, Tin học..." required>
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="formClassSign">Lớp / Chi đội chúc</label>
+            <input type="text" id="formClassSign" class="form-control" placeholder="Ví dụ: Tập thể học sinh lớp 9A">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="formAvatar">Biểu tượng / Màu thẻ</label>
+          <div class="avatar-select-palette" id="avatarColorPicker">
+            <label class="color-opt"><input type="radio" name="cardTheme" value="rose" checked><span class="color-dot rose"></span> Hồng phấn</label>
+            <label class="color-opt"><input type="radio" name="cardTheme" value="amber"><span class="color-dot amber"></span> Vàng ấm</label>
+            <label class="color-opt"><input type="radio" name="cardTheme" value="mint"><span class="color-dot mint"></span> Xanh ngọc</label>
+            <label class="color-opt"><input type="radio" name="cardTheme" value="sky"><span class="color-dot sky"></span> Lam nhạt</label>
+            <label class="color-opt"><input type="radio" name="cardTheme" value="lavender"><span class="color-dot lavender"></span> Oải hương</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="label-with-hint">
+            <label for="formMessage">Nội dung bức thư tri ân <span class="req">*</span></label>
+            <button type="button" class="text-link-btn" id="generateTemplateWishBtn">
+              <i class="fa-solid fa-wand-magic"></i> Gợi ý lời chúc theo môn
+            </button>
+          </div>
+          <textarea id="formMessage" class="form-control lined-textarea" rows="6" placeholder="Viết những lời tâm tình, lời cảm ơn sâu sắc nhất gửi đến Thầy/Cô..." required></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="action-btn btn-secondary" id="cancelEditModalBtn">Hủy Bỏ</button>
+          <button type="submit" class="action-btn btn-primary" id="saveTeacherBtn">
+            <i class="fa-solid fa-floppy-disk"></i> Lưu Thay Đổi
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: GHI ÂM HOẶC TẢI FILE ÂM THANH THỰC TẾ   -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="voiceRecordModal" style="display: none;">
+    <div class="modal-dialog scrapbook-modal">
+      <div class="washi-tape tape-center"></div>
+
+      <div class="modal-header">
+        <h3 class="modal-title">Ghi Âm Hoặc Tải Giọng Đọc Thực Tế</h3>
+        <button class="modal-close-btn" id="closeVoiceModalBtn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-hint">
+          Tích hợp giọng nói thật của các bạn học sinh hoặc tập thể lớp gửi đến Thầy/Cô. Bạn có thể ghi âm trực tiếp ngay trên trình duyệt hoặc tải lên file thu âm (MP3, M4A, WAV).
+        </p>
+
+        <!-- Tab chuyển đổi: Ghi âm trực tiếp / Tải file có sẵn -->
+        <div class="sub-tab-group">
+          <button class="sub-tab active" id="tabDirectRecord">
+            <i class="fa-solid fa-microphone"></i> Ghi âm trực tiếp
+          </button>
+          <button class="sub-tab" id="tabUploadAudio">
+            <i class="fa-solid fa-file-audio"></i> Tải file ghi âm
+          </button>
+        </div>
+
+        <!-- Khung ghi âm trực tiếp -->
+        <div class="voice-box record-box" id="recordBoxSection">
+          <div class="mic-visualizer" id="micVisualizer">
+            <div class="pulse-ring"></div>
+            <i class="fa-solid fa-microphone mic-icon"></i>
+          </div>
+          
+          <div class="record-timer" id="recordTimer">00:00</div>
+          <p class="record-state-label" id="recordStateLabel">Nhấn nút bên dưới để bắt đầu ghi âm</p>
+
+          <div class="record-buttons">
+            <button type="button" class="action-btn btn-danger" id="startRecordBtn">
+              <i class="fa-solid fa-circle-dot"></i> Bắt đầu ghi âm
+            </button>
+            <button type="button" class="action-btn btn-secondary" id="stopRecordBtn" style="display: none;">
+              <i class="fa-solid fa-stop"></i> Dừng ghi âm
+            </button>
+          </div>
+        </div>
+
+        <!-- Khung tải file âm thanh có sẵn -->
+        <div class="voice-box upload-box" id="uploadBoxSection" style="display: none;">
+          <div class="drop-zone" id="audioDropZone">
+            <i class="fa-solid fa-cloud-arrow-up upload-big-icon"></i>
+            <p>Kéo thả tệp âm thanh vào đây, hoặc <span class="text-accent underline">Bấm để chọn file</span></p>
+            <span class="file-hint">Hỗ trợ các định dạng: MP3, M4A, WAV, OGG, WEBM</span>
+            <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
+          </div>
+        </div>
+
+        <!-- Khung xem trước âm thanh sau khi ghi hoặc tải -->
+        <div class="audio-preview-container" id="audioPreviewContainer" style="display: none;">
+          <h5 class="preview-title"><i class="fa-solid fa-headphones"></i> Nghe thử bản thu:</h5>
+          <audio id="previewAudioElement" controls style="width: 100%; border-radius: 8px;"></audio>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="action-btn btn-secondary" id="removeAudioBtn">
+            <i class="fa-solid fa-trash-can"></i> Xóa âm thanh hiện tại
+          </button>
+          <button type="button" class="action-btn btn-primary" id="saveAudioBtn" disabled>
+            <i class="fa-solid fa-check"></i> Áp Dụng Bản Thu Này
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: QUẢN LÝ TỔNG THỂ & KHÔI PHỤC DỮ LIỆU    -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="manageListModal" style="display: none;">
+    <div class="modal-dialog scrapbook-modal wide-modal">
+      <div class="washi-tape tape-center"></div>
+
+      <div class="modal-header">
+        <h3 class="modal-title">Quản Lý Danh Sách & Sao Lưu Dữ Liệu</h3>
+        <button class="modal-close-btn" id="closeManageModalBtn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-hint">
+          Tất cả dữ liệu Thầy Cô, lời chúc và bản ghi âm đều được lưu trữ trực tiếp trên trình duyệt của bạn (LocalStorage & IndexedDB). Bạn có thể sao lưu ra file để dùng trên máy khác hoặc khôi phục danh sách mặc định của trường THCS Số 2 Hiếu Giang.
+        </p>
+
+        <div class="manage-stats-bar">
+          <div class="stat-pill"><i class="fa-solid fa-chalkboard-user"></i> Tổng số: <strong id="manageTotalCount">0</strong> thầy cô</div>
+          <div class="stat-pill"><i class="fa-solid fa-microphone"></i> Có bản thu âm: <strong id="manageAudioCount">0</strong></div>
+        </div>
+
+        <div class="manage-actions-row">
+          <button class="action-btn btn-secondary" id="exportDataBtn">
+            <i class="fa-solid fa-file-export"></i> Xuất Dữ Liệu Ra File JSON
+          </button>
+          <label class="action-btn btn-secondary file-btn-label">
+            <i class="fa-solid fa-file-import"></i> Nhập Dữ Liệu Từ File JSON
+            <input type="file" id="importDataInput" accept=".json" style="display: none;">
+          </label>
+          <button class="action-btn btn-danger" id="resetDefaultsBtn">
+            <i class="fa-solid fa-rotate-left"></i> Khôi Phục Dữ Liệu Mẫu
+          </button>
+        </div>
+
+        <!-- Bảng danh sách tóm tắt để sửa/xóa nhanh -->
+        <div class="table-scroll-wrap">
+          <table class="scrapbook-table">
+            <thead>
+              <tr>
+                <th>Danh xưng</th>
+                <th>Họ và Tên</th>
+                <th>Bộ Môn</th>
+                <th>Âm thanh</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="manageTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KHU VỰC IN ẤN RIÊNG BIỆT (CHỈ HIỂN THỊ KHI IN ẤN WINDOW.PRINT) -->
+  <div class="print-only-container" id="printContainer">
+    <!-- Nội dung thiệp in ấn được inject động qua JS -->
+  </div>
+
+  <!-- Toast thông báo thân thiện -->
+  <div id="toastNotification" class="toast-popup" style="display: none;">
+    <i class="fa-solid fa-circle-check toast-icon"></i>
+    <span id="toastMessage">Nội dung thông báo</span>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="app.js"></script>
+</body>
+</html>
