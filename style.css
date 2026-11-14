@@ -1,0 +1,1804 @@
+/* ==========================================================================
+   TRI ÂN THẦY CÔ - TRƯỜNG THCS SỐ 2 HIẾU GIANG
+   Phong cách Scrapbook / Kỷ yếu học trò / Giấy vở ô ly / Tông màu Pastel
+   ========================================================================== */
+
+:root {
+  --font-main: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-handwriting: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+  --font-cursive: 'Dancing Script', 'Caveat', cursive;
+  --font-quote: 'Caveat', cursive;
+
+  /* Bảng màu pastel ấm áp học trò */
+  --color-bg: #FAF7F0;
+  --color-paper: #FFFDF9;
+  --color-lined: #EFF3F8;
+  --color-ink-blue: #1A365D;
+  --color-ink-purple: #3B2E58;
+  --color-text-dark: #2D3748;
+  --color-text-muted: #718096;
+  
+  --color-primary: #D97706; /* Màu vàng cam hổ phách */
+  --color-primary-light: #FEF3C7;
+  --color-coral: #F43F5E;
+  --color-coral-light: #FFE4E6;
+  --color-sage: #10B981;
+  --color-sage-light: #D1FAE5;
+  --color-sky: #0284C7;
+  --color-sky-light: #E0F2FE;
+  --color-lavender: #8B5CF6;
+  --color-lavender-light: #EDE9FE;
+
+  --washi-tape-color-1: rgba(251, 191, 36, 0.65);
+  --washi-tape-color-2: rgba(244, 63, 94, 0.45);
+  --washi-tape-color-3: rgba(16, 185, 129, 0.45);
+  --washi-tape-color-4: rgba(14, 165, 233, 0.45);
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 6px 16px rgba(45, 55, 72, 0.08);
+  --shadow-lg: 0 12px 28px rgba(45, 55, 72, 0.12);
+  --shadow-envelope: 0 16px 36px rgba(60, 40, 20, 0.15);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+}
+
+/* Reset & Nền chung */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text-dark);
+  line-height: 1.6;
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(#E2D9C8 1px, transparent 1px),
+    radial-gradient(#E2D9C8 1px, #FAF7F0 1px);
+  background-size: 28px 28px;
+  background-position: 0 0, 14px 14px;
+}
+
+/* Canvas hiệu ứng hoa hướng dương & trái tim lơ lửng */
+#particleCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Bố cục ứng dụng */
+.app-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* Thanh điều khiển nổi ở góc */
+.floating-controls {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all 0.25s ease;
+}
+
+.pill-btn:hover {
+  transform: translateY(-2px);
+  background: #FFF;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+  color: var(--color-primary);
+}
+
+.pill-btn.active {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: #B45309;
+}
+
+/* ==========================================================================
+   BĂNG DÍNH WASHI TAPE & ĐẶC TRƯNG SCRAPBOOK
+   ========================================================================== */
+.washi-tape {
+  position: absolute;
+  height: 28px;
+  width: 130px;
+  background-color: var(--washi-tape-color-1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0.85;
+  clip-path: polygon(0 0, 96% 0, 100% 100%, 4% 100%);
+}
+
+.tape-center {
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  background-color: var(--washi-tape-color-2);
+}
+
+.tape-top-left {
+  top: -12px;
+  left: 20px;
+  transform: rotate(-3deg);
+  background-color: var(--washi-tape-color-1);
+}
+
+.tape-top-right {
+  top: -12px;
+  right: 20px;
+  transform: rotate(3deg);
+  background-color: var(--washi-tape-color-3);
+}
+
+.tape-top-center {
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1.5deg);
+  background-color: var(--washi-tape-color-4);
+}
+
+/* ==========================================================================
+   HEADER SCRAPBOOK
+   ========================================================================== */
+.header-scrapbook {
+  position: relative;
+  background: var(--color-paper);
+  border-radius: var(--radius-lg);
+  padding: 32px 36px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #EADBCC;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.school-badge-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.school-stamp {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 3px dashed var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  transform: rotate(-6deg);
+  box-shadow: inset 0 0 8px rgba(217, 119, 6, 0.15);
+  flex-shrink: 0;
+}
+
+.school-stamp i {
+  font-size: 1.8rem;
+}
+
+.school-stamp span {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.sub-header-tag {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 4px;
+}
+
+.school-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #78350F;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.school-slogan {
+  font-family: var(--font-quote);
+  font-size: 1.35rem;
+  color: var(--color-text-muted);
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Nút bấm chung */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-main);
+  font-size: 0.92rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #D97706, #B45309);
+  color: #FFF;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+}
+
+.btn-secondary {
+  background: #F3F4F6;
+  color: var(--color-text-dark);
+  border: 1px solid #E5E7EB;
+}
+.btn-secondary:hover {
+  background: #E5E7EB;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #FFF;
+}
+.btn-success:hover {
+  background: linear-gradient(135deg, #10B981, #059669);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #4F46E5, #4338CA);
+  color: #FFF;
+}
+.btn-accent:hover {
+  background: linear-gradient(135deg, #6366F1, #4F46E5);
+}
+
+.btn-danger {
+  background: #EF4444;
+  color: #FFF;
+}
+.btn-danger:hover {
+  background: #DC2626;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* ==========================================================================
+   CÁC KHỐI SECTION CHÍNH (CARD SCRAPBOOK)
+   ========================================================================== */
+.card-scrapbook {
+  position: relative;
+  background: var(--color-paper);
+  border-radius: var(--radius-lg);
+  padding: 32px 36px;
+  margin-bottom: 36px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #EADBCC;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.badge-number {
+  width: 38px;
+  height: 38px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  font-size: 1.15rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #78350F;
+}
+
+.section-desc {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   PHẦN 1: BỘ LỌC & DANH SÁCH THẦY CÔ
+   ========================================================================== */
+.filter-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.gender-filter-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-main);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+  background: #E5E7EB;
+  color: var(--color-text-dark);
+}
+
+.filter-chip.active {
+  background: var(--color-primary);
+  color: #FFF;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 10px rgba(217, 119, 6, 0.25);
+}
+
+.search-and-subject {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 280px;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  color: #9CA3AF;
+  font-size: 0.95rem;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 11px 40px 11px 42px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid #E2E8F0;
+  background: #FFF;
+  font-family: var(--font-main);
+  font-size: 0.92rem;
+  color: var(--color-text-dark);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-box input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+
+.clear-btn {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #9CA3AF;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 4px;
+}
+
+.subject-dropdown-wrap {
+  width: 220px;
+}
+
+.scrapbook-select {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid #E2E8F0;
+  background: #FFF;
+  font-family: var(--font-main);
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--color-text-dark);
+  outline: none;
+  cursor: pointer;
+}
+
+.scrapbook-select:focus {
+  border-color: var(--color-primary);
+}
+
+/* Lưới thẻ giáo viên phong cách ảnh Polaroid kỷ yếu */
+.teacher-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 22px;
+}
+
+.teacher-card {
+  background: #FFF;
+  border-radius: var(--radius-md);
+  padding: 18px 16px;
+  border: 1.5px solid #EADBCC;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.teacher-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.teacher-card.selected {
+  border-color: var(--color-primary);
+  background: #FFFDF9;
+  box-shadow: 0 0 0 2.5px var(--color-primary), var(--shadow-md);
+}
+
+/* Băng keo dán thẻ giáo viên */
+.card-mini-tape {
+  position: absolute;
+  top: -8px;
+  width: 50px;
+  height: 16px;
+  background-color: var(--washi-tape-color-1);
+  opacity: 0.8;
+  transform: rotate(-2deg);
+  border-radius: 2px;
+}
+
+.teacher-card:nth-child(even) .card-mini-tape {
+  background-color: var(--washi-tape-color-2);
+  transform: rotate(2deg);
+}
+
+.teacher-avatar-frame {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  border: 3px solid #FFF;
+}
+
+/* Các tông màu avatar */
+.theme-rose { background: #FFE4E6; color: #E11D48; }
+.theme-amber { background: #FEF3C7; color: #D97706; }
+.theme-mint { background: #D1FAE5; color: #059669; }
+.theme-sky { background: #E0F2FE; color: #0284C7; }
+.theme-lavender { background: #EDE9FE; color: #7C3AED; }
+
+.teacher-name {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin-bottom: 4px;
+}
+
+.teacher-subject-tag {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #F3F4F6;
+  color: #4B5563;
+  margin-bottom: 12px;
+}
+
+.teacher-card-footer {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px dashed #E5E7EB;
+}
+
+.card-audio-indicator {
+  font-size: 0.8rem;
+  color: var(--color-sage);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-action-select {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  color: #D1D5DB;
+  margin-bottom: 12px;
+}
+
+/* ==========================================================================
+   PHẦN 2: BỨC THƯ TAY & HIỆU ỨNG PHONG BÌ (3D ENVELOPE)
+   ========================================================================== */
+.envelope-showcase-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0 10px;
+}
+
+.envelope-outer {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  min-height: 420px;
+  background: #EFE7DA;
+  border-radius: 12px;
+  box-shadow: var(--shadow-envelope);
+  cursor: pointer;
+  perspective: 1200px;
+  transition: all 0.4s ease;
+  overflow: visible;
+  margin-bottom: 24px;
+}
+
+/* Nắp phong bì tam giác gập mở */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 180px;
+  background: #E5D9C7;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s ease;
+  z-index: 5;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Con dấu sáp đỏ niêm phong nắp thư */
+.wax-seal {
+  position: absolute;
+  top: 145px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  background: radial-gradient(circle, #BE123C, #881337);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(136, 19, 55, 0.4), inset 0 2px 4px rgba(255,255,255,0.3);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFE4E6;
+  transition: all 0.3s ease;
+}
+
+.wax-seal:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.seal-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.seal-inner i {
+  font-size: 1.1rem;
+}
+
+.seal-text {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  margin-top: 2px;
+}
+
+/* Mặt trước phong bì túi */
+.envelope-pocket {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 280px;
+  background: #EFE7DA;
+  border-radius: 0 0 12px 12px;
+  z-index: 4;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 10px 20px rgba(0,0,0,0.02);
+}
+
+.envelope-stamp {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.post-stamp {
+  width: 58px;
+  height: 70px;
+  border: 2px dashed #92400E;
+  background: #FEF3C7;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #92400E;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.1);
+  transform: rotate(3deg);
+}
+
+.post-mark {
+  border: 1.5px solid #9CA3AF;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.58rem;
+  color: #6B7280;
+  transform: rotate(-8deg);
+  opacity: 0.8;
+}
+
+.envelope-recipient-preview {
+  margin-top: 10px;
+}
+
+.send-to-label {
+  display: block;
+  font-family: var(--font-quote);
+  font-size: 1.2rem;
+  color: #78350F;
+}
+
+.recipient-name-preview {
+  display: block;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #1F2937;
+  letter-spacing: 0.5px;
+}
+
+.recipient-subject-preview {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.envelope-hint {
+  text-align: center;
+  font-size: 0.88rem;
+  color: #92400E;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pulse-animation {
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* ==========================================================================
+   BỨC THƯ TAY TRÊN GIẤY VỞ HỌC TRÒ (NOTEBOOK PAPER)
+   ========================================================================== */
+.letter-paper {
+  position: relative;
+  background: #FFFDF9;
+  border-radius: 8px;
+  padding: 40px 48px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  margin: 0 auto;
+  width: 95%;
+  z-index: 2;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+
+  /* Giấy kẻ ngang học sinh */
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    #E2E8F0 32px
+  );
+  line-height: 32px;
+}
+
+/* Đường lề đỏ vở học trò */
+.paper-margin-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 65px;
+  width: 2px;
+  background-color: rgba(239, 68, 68, 0.35);
+}
+
+.corner-tape {
+  position: absolute;
+  top: 10px;
+  width: 60px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+.corner-left {
+  left: -15px;
+  transform: rotate(-45deg);
+  background: var(--washi-tape-color-1);
+}
+
+.corner-right {
+  right: -15px;
+  transform: rotate(45deg);
+  background: var(--washi-tape-color-2);
+}
+
+.letter-inner-content {
+  position: relative;
+  z-index: 3;
+}
+
+.letter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  line-height: normal;
+}
+
+.school-micro-header {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #B45309;
+  letter-spacing: 0.8px;
+}
+
+.letter-date {
+  font-family: var(--font-quote);
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+.letter-salutation {
+  font-family: var(--font-handwriting);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--color-ink-purple);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.letter-body-text {
+  font-family: var(--font-handwriting);
+  font-size: 1.55rem;
+  color: var(--color-ink-blue);
+  white-space: pre-line;
+  margin-bottom: 24px;
+  line-height: 32px;
+}
+
+/* KHU VỰC AUDIO TRONG BỨC THƯ */
+.letter-audio-box {
+  background: rgba(254, 243, 199, 0.5);
+  border: 1.5px dashed var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin: 20px 0 24px;
+  line-height: normal;
+}
+
+.audio-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.audio-tag {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #92400E;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.audio-note-status {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-sage-light);
+  color: var(--color-sage);
+}
+
+.custom-audio-player {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.play-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #FFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(217, 119, 6, 0.3);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.play-btn:hover {
+  transform: scale(1.08);
+  background: #B45309;
+}
+
+.audio-track-info {
+  flex: 1;
+}
+
+.audio-title-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.track-title {
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.audio-timer {
+  color: var(--color-text-muted);
+  font-family: monospace;
+}
+
+.progress-container {
+  height: 8px;
+  background: #E5E7EB;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.1s linear;
+}
+
+.mini-icon-btn {
+  background: #FFF;
+  border: 1px solid #D1D5DB;
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.mini-icon-btn:hover {
+  background: #F3F4F6;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Chữ ký & Lời kết */
+.letter-signature-block {
+  margin-top: 24px;
+  line-height: normal;
+}
+
+.closing-phrase {
+  font-family: var(--font-handwriting);
+  font-size: 1.45rem;
+  color: var(--color-ink-blue);
+  margin-bottom: 16px;
+}
+
+.signature-handwriting {
+  text-align: right;
+  padding-right: 20px;
+}
+
+.sign-from {
+  display: block;
+  font-family: var(--font-quote);
+  font-size: 1.3rem;
+  color: var(--color-text-muted);
+}
+
+.sign-class {
+  display: block;
+  font-family: var(--font-cursive);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-coral);
+  margin-top: 4px;
+}
+
+/* TRẠNG THÁI MỞ PHONG BÌ */
+.envelope-outer.is-open {
+  box-shadow: none;
+  background: transparent;
+}
+
+.envelope-outer.is-open .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+.envelope-outer.is-open .wax-seal {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.envelope-outer.is-open .envelope-pocket {
+  display: none;
+}
+
+.envelope-outer.is-open .letter-paper {
+  transform: translateY(0);
+  width: 100%;
+}
+
+.envelope-outer:not(.is-open) .letter-paper {
+  display: none;
+}
+
+.envelope-action-buttons {
+  display: flex;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+/* ==========================================================================
+   PHẦN 3: HIỂN THỊ MÃ QR & TIỆN ÍCH IN ẤN
+   ========================================================================== */
+.qr-showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.qr-card-preview {
+  position: relative;
+  background: #FFF;
+  border: 2px solid #EADBCC;
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  transition: transform 0.25s ease;
+}
+
+.qr-card-preview:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.qr-tape-accent {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(2deg);
+  width: 110px;
+  height: 24px;
+  background: var(--washi-tape-color-1);
+  opacity: 0.85;
+}
+
+.qr-card-logo {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.qr-card-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1F2937;
+  margin-bottom: 2px;
+}
+
+.qr-card-sub {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  margin-bottom: 18px;
+}
+
+.qr-code-wrapper {
+  background: #FAF7F0;
+  border: 1.5px dashed #CBD5E1;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+#qrcodeContainer {
+  background: #FFF;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  display: inline-block;
+}
+
+#qrcodeContainer canvas,
+#qrcodeContainer img {
+  display: block;
+}
+
+.qr-scan-guide {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.qr-card-footer {
+  border-top: 1px dashed #E5E7EB;
+  padding-top: 12px;
+}
+
+.qr-footer-quote {
+  display: block;
+  font-family: var(--font-quote);
+  font-size: 1.15rem;
+  color: var(--color-coral);
+  margin-bottom: 4px;
+}
+
+.qr-footer-hash {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  letter-spacing: 0.5px;
+}
+
+.qr-actions-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel-heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #78350F;
+}
+
+.panel-desc {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.btn-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scrapbook-tip-box {
+  background: #FEF3C7;
+  border-left: 4px solid #D97706;
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  color: #92400E;
+}
+
+.tip-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+/* ==========================================================================
+   MODAL WINDOWS & FORMS
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.scrapbook-modal {
+  position: relative;
+  background: #FFFDF9;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid #EADBCC;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  animation: popUp 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scrapbook-modal.wide-modal {
+  max-width: 820px;
+}
+
+@keyframes popUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1.5px dashed #E5E7EB;
+  padding-bottom: 12px;
+}
+
+.modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #78350F;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #9CA3AF;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  color: var(--color-coral);
+}
+
+.modal-hint {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+
+label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  margin-bottom: 6px;
+}
+
+.req {
+  color: var(--color-coral);
+}
+
+.label-with-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-link-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.text-link-btn:hover {
+  text-decoration: underline;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #D1D5DB;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 0.92rem;
+  color: var(--color-text-dark);
+  outline: none;
+  background: #FFF;
+  transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+
+.lined-textarea {
+  line-height: 26px;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 25px,
+    #F3F4F6 26px
+  );
+  font-family: var(--font-handwriting);
+  font-size: 1.35rem;
+}
+
+.avatar-select-palette {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.color-opt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.color-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 2px solid #FFF;
+  box-shadow: 0 0 0 1px #D1D5DB;
+}
+
+.color-dot.rose { background: #FDA4AF; }
+.color-dot.amber { background: #FCD34D; }
+.color-dot.mint { background: #6EE7B7; }
+.color-dot.sky { background: #7DD3FC; }
+.color-dot.lavender { background: #C4B5FD; }
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  border-top: 1px dashed #E5E7EB;
+  padding-top: 16px;
+}
+
+/* PHẦN GHI ÂM MODAL */
+.sub-tab-group {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid #E5E7EB;
+  margin-bottom: 20px;
+}
+
+.sub-tab {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.sub-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.voice-box {
+  background: #FAF7F0;
+  border: 2px dashed #CBD5E1;
+  border-radius: var(--radius-md);
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.mic-visualizer {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-coral-light);
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mic-icon {
+  font-size: 2rem;
+  color: var(--color-coral);
+  z-index: 2;
+}
+
+.mic-visualizer.recording .pulse-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--color-coral);
+  opacity: 0.4;
+  animation: ripple 1.2s infinite;
+}
+
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.record-timer {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  font-family: monospace;
+  margin-bottom: 6px;
+}
+
+.record-state-label {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 18px;
+}
+
+.drop-zone {
+  padding: 36px 20px;
+  cursor: pointer;
+}
+
+.upload-big-icon {
+  font-size: 3rem;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.file-hint {
+  display: block;
+  font-size: 0.78rem;
+  color: #9CA3AF;
+  margin-top: 6px;
+}
+
+.audio-preview-container {
+  margin: 16px 0;
+  padding: 14px;
+  background: #F3F4F6;
+  border-radius: var(--radius-sm);
+}
+
+.preview-title {
+  font-size: 0.85rem;
+  color: #4B5563;
+  margin-bottom: 8px;
+}
+
+/* QUẢN LÝ DANH SÁCH BẢNG */
+.manage-stats-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.stat-pill {
+  background: #FEF3C7;
+  color: #92400E;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.manage-actions-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.file-btn-label {
+  cursor: pointer;
+}
+
+.table-scroll-wrap {
+  max-height: 380px;
+  overflow-y: auto;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius-sm);
+}
+
+.scrapbook-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.scrapbook-table th,
+.scrapbook-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.scrapbook-table th {
+  background: #FAF7F0;
+  font-weight: 700;
+  color: #78350F;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.table-btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.tbl-btn {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #D1D5DB;
+  background: #FFF;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.tbl-btn:hover {
+  background: #F3F4F6;
+}
+
+.tbl-btn.delete:hover {
+  border-color: #EF4444;
+  color: #EF4444;
+}
+
+/* ==========================================================================
+   TOAST POPUP
+   ========================================================================== */
+.toast-popup {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1F2937;
+  color: #FFF;
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 2000;
+  font-size: 0.92rem;
+  font-weight: 500;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.toast-icon {
+  color: #10B981;
+  font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   FOOTER CHÂN TRANG
+   ========================================================================== */
+.footer-scrapbook {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  border-top: 1.5px dashed #E2D9C8;
+  margin-top: 40px;
+}
+
+.footer-sub {
+  font-size: 0.8rem;
+  margin-top: 4px;
+  color: #9CA3AF;
+}
+
+/* ==========================================================================
+   PRINT STYLES: TỐI ƯU HÓA IN THIỆP & DÁN BÁO TƯỜNG (@MEDIA PRINT)
+   ========================================================================== */
+.print-only-container {
+  display: none;
+}
+
+@media print {
+  body {
+    background: #FFF !important;
+    background-image: none !important;
+    color: #000 !important;
+  }
+
+  #particleCanvas,
+  .floating-controls,
+  .header-actions,
+  .filter-toolbar,
+  .teacher-grid,
+  .teacher-picker-section,
+  .envelope-action-buttons,
+  .qr-actions-panel,
+  .footer-scrapbook,
+  .modal-backdrop,
+  .toast-popup,
+  .washi-tape,
+  .wax-seal {
+    display: none !important;
+  }
+
+  .app-container {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .card-scrapbook {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  .letter-paper {
+    display: block !important;
+    box-shadow: none !important;
+    border: 1px solid #CCC !important;
+    page-break-after: always;
+  }
+
+  .qr-showcase-grid {
+    display: block !important;
+  }
+
+  .qr-card-preview {
+    border: 2px solid #333 !important;
+    box-shadow: none !important;
+    max-width: 480px;
+    margin: 20px auto;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN CHO ĐIỆN THOẠI & MÁY TÍNH BẢNG
+   ========================================================================== */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 16px 12px 60px;
+  }
+
+  .header-scrapbook {
+    padding: 24px 20px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .school-badge-container {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .card-scrapbook {
+    padding: 24px 18px;
+  }
+
+  .teacher-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+  }
+
+  .search-and-subject {
+    flex-direction: column;
+  }
+
+  .subject-dropdown-wrap {
+    width: 100%;
+  }
+
+  .qr-showcase-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .envelope-outer {
+    min-height: 380px;
+  }
+
+  .letter-paper {
+    padding: 28px 20px;
+  }
+
+  .paper-margin-line {
+    left: 30px;
+  }
+
+  .letter-salutation {
+    font-size: 1.45rem;
+  }
+
+  .letter-body-text {
+    font-size: 1.25rem;
+    line-height: 28px;
+  }
+
+  .custom-audio-player {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .audio-extra-actions {
+    text-align: right;
+  }
+}

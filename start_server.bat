@@ -1,11 +1,13 @@
-'HIẾU' is not recognized as an internal or external command,
-operable program or batch file.
-'hử' is not recognized as an internal or external command,
-operable program or batch file.
-'cửa' is not recognized as an internal or external command,
-operable program or batch file.
-'cho' is not recognized as an internal or external command,
-operable program or batch file.
-
-Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
-Press any key to continue . . .
+@echo off
+chcp 65001 > nul
+title Tri An Thay Co - THCS So 2 Hieu Giang
+echo ========================================================
+echo   TRI ÂN THẦY CÔ - TRƯỜNG THCS SỐ 2 HIẾU GIANG
+echo ========================================================
+echo Đang khởi động máy chủ thử nghiệm cục bộ...
+echo Vui lòng giữ cửa sổ này mở trong khi sử dụng trang web.
+echo.
+echo Địa chỉ truy cập: http://localhost:8080
+echo.
+python -m http.server 8080
+pause
